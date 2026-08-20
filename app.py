@@ -215,8 +215,8 @@ def report_delay_dialog(process_id, process_name):
 
 # 5. Page Definitions
 def render_dashboard():
-    st.markdown('<div class="main-title">🏭 Real-Time ShopFloor Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtitle">Live tracking of active production stages and machine utilization. Updates in real-time.</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-title">🏭 ShopFloor Automation Dashboard</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subtitle">Interactive tracking of production process machine status and utilization</div>', unsafe_allow_html=True)
     
     # Overview metrics
     machines = database.get_machines()
@@ -676,15 +676,7 @@ def main():
         "Navigation Menu", 
         ["📊 Real-Time Dashboard", "⚙️ Machine Registry", "🔄 Process Scheduler", "📈 Analytics & Reports"]
     )
-    
-    st.sidebar.markdown("<hr style='border: 0; border-top: 1px solid rgba(255,255,255,0.07); margin: 30px 0;'>", unsafe_allow_html=True)
-    st.sidebar.markdown("""
-        <div style="font-size: 0.8rem; color: #5C6F84; text-align: center;">
-            ShopFloor v1.0.0<br/>
-            Running on SQLite & Streamlit
-        </div>
-    """, unsafe_allow_html=True)
-    
+
     if page == "📊 Real-Time Dashboard":
         render_dashboard()
     elif page == "⚙️ Machine Registry":
