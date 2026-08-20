@@ -337,7 +337,7 @@ def render_dashboard():
                     reason = p_logs[0]["delay_reason"] if p_logs else "Unknown Issue"
                     delay_reason_text = f"<div style='color: #FFA726; font-size: 0.85rem; font-weight: 600; margin-top: -6px; margin-bottom: 8px;'>⚠️ DELAYED: {reason}</div>"
                 
-                st.markdown(f"""
+                st.html(f"""
                 <div class="glass-card" style="margin-bottom: 16px; border-left: 4px solid {status_color};">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
                         <div>
@@ -350,21 +350,18 @@ def render_dashboard():
                         </div>
                     </div>
                     {delay_reason_text}
-                    
                     <div style="font-size: 0.85rem; color: #D1DBE5; margin-bottom: 12px;">{p["details"]}</div>
-                    
                     <!-- Progress Bar -->
                     <div style="background-color: rgba(255,255,255,0.08); border-radius: 6px; height: 10px; width: 100%; margin-bottom: 8px; overflow: hidden;">
                         <div style="background: linear-gradient(90deg, #4FACFE 0%, #00F2FE 100%); height: 100%; width: {progress_pct}%; border-radius: 6px;"></div>
                     </div>
-                    
                     <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #8A99AD; margin-bottom: 16px;">
                         <div>Target: {format_seconds(target)}</div>
                         <div>Elapsed: <strong>{format_seconds(elapsed)}</strong></div>
                         <div>Delay: <strong style="color: #FFA726;">{format_seconds(delay)}</strong></div>
                     </div>
                 </div>
-                """, unsafe_allow_html=True)
+                """)
                 
                 # Interactive Control Buttons next to each process
                 btn_cols = st.columns([1, 1, 1, 1])
