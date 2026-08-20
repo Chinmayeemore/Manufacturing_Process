@@ -158,6 +158,13 @@ st.markdown("""
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(0, 242, 254, 0.2);
     }
+    
+    /* Prevent sidebar radio labels from wrapping */
+    [data-testid="stSidebar"] [data-testid="stRadio"] label,
+    [data-testid="stSidebar"] [data-testid="stRadio"] label p {
+        font-size: 0.85rem !important;
+        white-space: nowrap !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -216,7 +223,7 @@ def report_delay_dialog(process_id, process_name):
 # 5. Page Definitions
 def render_dashboard():
     st.markdown('<div class="main-title">🏭 ShopFloor Automation Dashboard</div>', unsafe_allow_html=True)
-    st.markdown('<div class="subtitle">Interactive tracking of production process machine status and utilization</div>', unsafe_allow_html=True)
+    st.markdown('<div class="subtitle">Interactive tracking of production processes, machine status, and utilization.</div>', unsafe_allow_html=True)
     
     # Overview metrics
     machines = database.get_machines()
@@ -299,7 +306,7 @@ def render_dashboard():
             """, unsafe_allow_html=True)
             
     with left_col:
-        st.markdown('<h3 style="font-family: Outfit; font-weight: 600;">🔄 Real-Time Process Execution</h3>', unsafe_allow_html=True)
+        st.markdown('<h3 style="font-family: Outfit; font-weight: 600;">🔄 Process Execution</h3>', unsafe_allow_html=True)
         st.write("")
         
         # Real-time state fragment to update progress every second
@@ -674,10 +681,10 @@ def main():
     
     page = st.sidebar.radio(
         "Navigation Menu", 
-        ["📊 Real-Time Dashboard", "⚙️ Machine Registry", "🔄 Process Scheduler", "📈 Analytics & Reports"]
+        ["📊 Automation Dashboard", "⚙️ Machine Registry", "🔄 Process Scheduler", "📈 Analytics & Reports"]
     )
 
-    if page == "📊 Real-Time Dashboard":
+    if page == "📊 Automation Dashboard":
         render_dashboard()
     elif page == "⚙️ Machine Registry":
         render_machines()
