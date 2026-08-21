@@ -193,8 +193,12 @@ def get_led_html(status):
         return f'<span class="led-indicator led-paused"></span>'
     return f'<span class="led-indicator led-pending"></span>'
 
+def clear_delay_dialog_state():
+    if "active_delay_process" in st.session_state:
+        del st.session_state.active_delay_process
+
 # 4. Streamlit Dialog Modal for Reporting Delay
-@st.dialog("⚠️ Report Process Delay")
+@st.dialog("⚠️ Report Process Delay", on_dismiss=clear_delay_dialog_state)
 def report_delay_dialog(process_id, process_name):
     st.markdown(f"Select the delay reason for **{process_name}**.")
     reason = st.selectbox(
@@ -209,6 +213,7 @@ def report_delay_dialog(process_id, process_name):
     col1, col2 = st.columns([1, 1])
     with col1:
         if st.button("Cancel", use_container_width=True):
+            clear_delay_dialog_state()
             st.rerun()
     with col2:
         if st.button("Confirm Delay", type="primary", use_container_width=True):
@@ -218,6 +223,7 @@ def report_delay_dialog(process_id, process_name):
             # Update database status to delayed
             database.transition_process(process_id, "delayed", final_reason)
             st.toast(f"Process #{process_id} reported as delayed: {final_reason}", icon="⚠️")
+            clear_delay_dialog_state()
             st.rerun()
 
 # 5. Page Definitions
@@ -387,7 +393,8 @@ def render_dashboard():
                 with btn_cols[2]:
                     if status == "running":
                         if st.button("⚠️ Report Delay", key=f"delay_{p['id']}", use_container_width=True):
-                            report_delay_dialog(p["id"], p["name"])
+                            st.session_state.active_delay_process = (p["id"], p["name"])
+                            st.rerun()
                 with btn_cols[3]:
                     if status in ("running", "paused", "delayed"):
                         if st.button("✅ Complete", key=f"complete_{p['id']}", type="primary", use_container_width=True):
@@ -692,6 +699,11 @@ def main():
         render_processes()
     elif page == "📈 Analytics & Reports":
         render_analytics()
+
+    # Trigger dialog if set in session state (outside the fragment auto-refresh)
+    if "active_delay_process" in st.session_state:
+        process_id, process_name = st.session_state.active_delay_process
+        report_delay_dialog(process_id, process_name)
 
 if __name__ == "__main__":
     main()
